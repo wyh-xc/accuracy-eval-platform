@@ -1,6 +1,6 @@
 """
-Strategy registry for managing evaluation strategies.
-Provides a central place to register and retrieve strategies.
+策略注册表模块，用于管理评测策略。
+提供注册和检索策略的中心位置。
 """
 
 from typing import Dict, List, Type, Optional
@@ -15,7 +15,7 @@ from .builtin_strategies import (
 
 
 class StrategyRegistry:
-    """Registry for managing evaluation strategies."""
+    """用于管理评测策略的注册表。"""
     
     _instance = None
     _strategies: Dict[str, EvaluationStrategy] = {}
@@ -29,7 +29,7 @@ class StrategyRegistry:
     
     @classmethod
     def _initialize_builtin_strategies(cls):
-        """Initialize built-in strategies."""
+        """初始化内置策略。"""
         cls._strategies = {
             "exact_match": ExactMatchStrategy(),
             "case_insensitive": CaseInsensitiveMatchStrategy(),
@@ -40,17 +40,17 @@ class StrategyRegistry:
     
     @classmethod
     def get_strategy(cls, strategy_id: str) -> Optional[EvaluationStrategy]:
-        """Get a strategy by its ID."""
+        """根据 ID 获取策略。"""
         return cls._strategies.get(strategy_id)
     
     @classmethod
     def get_all_strategies(cls) -> Dict[str, EvaluationStrategy]:
-        """Get all registered strategies."""
+        """获取所有已注册的策略。"""
         return cls._strategies.copy()
     
     @classmethod
     def get_strategy_list(cls) -> List[Dict[str, str]]:
-        """Get a list of strategy names and descriptions."""
+        """获取策略名称和描述列表。"""
         result = []
         for strategy_id, strategy in cls._strategies.items():
             result.append({
@@ -69,15 +69,15 @@ class StrategyRegistry:
         **kwargs
     ) -> bool:
         """
-        Register a custom strategy.
+        注册自定义策略。
         
-        Args:
-            strategy_id: Unique identifier for the strategy
-            strategy_class: The strategy class to register
-            **kwargs: Additional arguments to pass to the strategy constructor
+        参数:
+            strategy_id: 策略的唯一标识符
+            strategy_class: 要注册的策略类
+            **kwargs: 传递给策略构造函数的额外参数
             
-        Returns:
-            bool: True if registration successful, False otherwise
+        返回:
+            bool: 注册成功返回 True，否则返回 False
         """
         try:
             instance = strategy_class(**kwargs) if kwargs else strategy_class()
@@ -85,19 +85,19 @@ class StrategyRegistry:
             cls._custom_strategies[strategy_id] = strategy_class
             return True
         except Exception as e:
-            print(f"Failed to register custom strategy: {e}")
+            print(f"注册自定义策略失败：{e}")
             return False
     
     @classmethod
     def unregister_custom_strategy(cls, strategy_id: str) -> bool:
         """
-        Unregister a custom strategy.
+        注销自定义策略。
         
-        Args:
-            strategy_id: The ID of the strategy to remove
+        参数:
+            strategy_id: 要移除的策略 ID
             
-        Returns:
-            bool: True if unregistration successful, False otherwise
+        返回:
+            bool: 注销成功返回 True，否则返回 False
         """
         if strategy_id in cls._custom_strategies:
             del cls._strategies[strategy_id]
@@ -107,5 +107,5 @@ class StrategyRegistry:
     
     @classmethod
     def is_custom_strategy(cls, strategy_id: str) -> bool:
-        """Check if a strategy is custom."""
+        """检查策略是否为自定义策略。"""
         return strategy_id in cls._custom_strategies

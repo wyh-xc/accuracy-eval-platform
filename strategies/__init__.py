@@ -1,5 +1,5 @@
 """
-Strategies package initialization.
+策略包初始化。
 """
 
 from .base import EvaluationStrategy

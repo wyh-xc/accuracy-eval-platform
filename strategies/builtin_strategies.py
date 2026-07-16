@@ -1,5 +1,5 @@
 """
-Built-in evaluation strategies for accuracy calculation.
+内置评测策略模块，用于准确率计算。
 """
 
 from typing import Any
@@ -7,7 +7,7 @@ from .base import EvaluationStrategy
 
 
 class ExactMatchStrategy(EvaluationStrategy):
-    """Exact match comparison strategy."""
+    """精确匹配比较策略。"""
     
     @property
     def name(self) -> str:
@@ -22,7 +22,7 @@ class ExactMatchStrategy(EvaluationStrategy):
 
 
 class CaseInsensitiveMatchStrategy(EvaluationStrategy):
-    """Case-insensitive match comparison strategy."""
+    """忽略大小写匹配比较策略。"""
     
     @property
     def name(self) -> str:
@@ -37,7 +37,7 @@ class CaseInsensitiveMatchStrategy(EvaluationStrategy):
 
 
 class NumericToleranceStrategy(EvaluationStrategy):
-    """Numeric comparison with tolerance strategy."""
+    """数值容差比较策略。"""
     
     def __init__(self, tolerance: float = 0.01):
         self.tolerance = tolerance
@@ -60,7 +60,7 @@ class NumericToleranceStrategy(EvaluationStrategy):
 
 
 class ContainsMatchStrategy(EvaluationStrategy):
-    """Contains match strategy - checks if actual contains expected."""
+    """包含匹配策略 - 检查实际值是否包含预期值。"""
     
     @property
     def name(self) -> str:
@@ -75,7 +75,7 @@ class ContainsMatchStrategy(EvaluationStrategy):
 
 
 class JSONMatchStrategy(EvaluationStrategy):
-    """JSON structure match strategy."""
+    """JSON 结构匹配策略。"""
     
     @property
     def name(self) -> str:

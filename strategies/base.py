@@ -1,6 +1,6 @@
 """
-Strategy pattern base class for accuracy evaluation logic.
-All custom evaluation strategies must inherit from this class.
+策略模式的基类，用于准确率评测逻辑。
+所有自定义评测策略必须继承自此类。
 """
 
 from abc import ABC, abstractmethod
@@ -8,29 +8,29 @@ from typing import Any, Dict, List
 
 
 class EvaluationStrategy(ABC):
-    """Base class for all evaluation strategies."""
+    """所有评测策略的基类。"""
     
     @abstractmethod
     def evaluate(self, expected: Any, actual: Any) -> bool:
         """
-        Evaluate if the actual value matches the expected value.
+        评估实际值是否与预期值匹配。
         
-        Args:
-            expected: The expected value from the dataset
-            actual: The actual value from API response
+        参数:
+            expected: 数据集中的预期值
+            actual: API 响应中的实际值
             
-        Returns:
-            bool: True if match, False otherwise
+        返回:
+            bool: 匹配返回 True，否则返回 False
         """
         pass
     
     @property
     @abstractmethod
     def name(self) -> str:
-        """Return the display name of this strategy."""
+        """返回此策略的显示名称。"""
         pass
     
     @property
     def description(self) -> str:
-        """Return a description of this strategy."""
+        """返回此策略的描述。"""
         return ""

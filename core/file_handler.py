@@ -1,5 +1,5 @@
 """
-File handler module for processing uploaded files (Excel, CSV).
+文件处理模块，用于处理上传的文件（Excel、CSV）。
 """
 
 import pandas as pd
@@ -8,53 +8,53 @@ from pathlib import Path
 
 
 class FileHandler:
-    """Handle file uploads and data extraction."""
+    """处理文件上传和数据提取。"""
     
     SUPPORTED_EXTENSIONS = ['.csv', '.xlsx', '.xls']
     
     @classmethod
     def read_file(cls, file_path: str) -> Optional[pd.DataFrame]:
         """
-        Read a file and return its content as a DataFrame.
+        读取文件并将其内容作为 DataFrame 返回。
         
-        Args:
-            file_path: Path to the file
+        参数:
+            file_path: 文件路径
             
-        Returns:
-            pd.DataFrame or None if reading fails
+        返回:
+            pd.DataFrame，如果读取失败则返回 None
         """
         try:
             path = Path(file_path)
             extension = path.suffix.lower()
             
             if extension == '.csv':
-                # Try different encodings
+                # 尝试不同的编码
                 for encoding in ['utf-8', 'gbk', 'gb2312', 'latin1']:
                     try:
                         df = pd.read_csv(file_path, encoding=encoding)
                         return df
                     except UnicodeDecodeError:
                         continue
-                raise ValueError("Unable to decode CSV file with supported encodings")
+                raise ValueError("无法使用支持的编码解码 CSV 文件")
             elif extension in ['.xlsx', '.xls']:
                 df = pd.read_excel(file_path)
                 return df
             else:
-                raise ValueError(f"Unsupported file type: {extension}")
+                raise ValueError(f"不支持的文件类型：{extension}")
         except Exception as e:
-            print(f"Error reading file: {e}")
+            print(f"读取文件时出错：{e}")
             return None
     
     @classmethod
     def get_columns(cls, file_path: str) -> List[str]:
         """
-        Get column names from a file.
+        从文件中获取列名。
         
-        Args:
-            file_path: Path to the file
+        参数:
+            file_path: 文件路径
             
-        Returns:
-            List of column names
+        返回:
+            列名列表
         """
         df = cls.read_file(file_path)
         if df is not None:
@@ -68,20 +68,20 @@ class FileHandler:
         required_columns: List[str]
     ) -> Dict[str, Any]:
         """
-        Validate that required columns exist in the file.
+        验证文件中是否存在必需的列。
         
-        Args:
-            file_path: Path to the file
-            required_columns: List of required column names
+        参数:
+            file_path: 文件路径
+            required_columns: 必需的列名列表
             
-        Returns:
-            Dict with validation result and details
+        返回:
+            包含验证结果和详细信息的字典
         """
         df = cls.read_file(file_path)
         if df is None:
             return {
                 "valid": False,
-                "error": "Failed to read file",
+                "error": "读取文件失败",
                 "available_columns": []
             }
         
@@ -91,7 +91,7 @@ class FileHandler:
         if missing_columns:
             return {
                 "valid": False,
-                "error": f"Missing columns: {', '.join(missing_columns)}",
+                "error": f"缺少列：{', '.join(missing_columns)}",
                 "available_columns": available_columns
             }
         
@@ -111,16 +111,16 @@ class FileHandler:
         actual_column: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """
-        Extract relevant data from the file.
+        从文件中提取相关数据。
         
-        Args:
-            file_path: Path to the file
-            input_column: Column containing input data
-            expected_column: Column containing expected results
-            actual_column: Column containing actual results (optional)
+        参数:
+            file_path: 文件路径
+            input_column: 包含输入数据的列
+            expected_column: 包含预期结果的列
+            actual_column: 包含实际结果的列（可选）
             
-        Returns:
-            List of dictionaries with extracted data
+        返回:
+            包含提取数据的字典列表
         """
         df = cls.read_file(file_path)
         if df is None:

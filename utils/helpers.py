@@ -1,5 +1,5 @@
 """
-Utility functions for the application.
+应用程序的工具函数模块。
 """
 
 import os
@@ -10,13 +10,13 @@ from werkzeug.utils import secure_filename
 
 def generate_unique_filename(original_filename: str) -> str:
     """
-    Generate a unique filename while preserving the original extension.
+    生成唯一文件名，同时保留原始扩展名。
     
-    Args:
-        original_filename: The original uploaded filename
+    参数:
+        original_filename: 原始上传的文件名
         
-    Returns:
-        A unique filename with the same extension
+    返回:
+        具有相同扩展名的唯一文件名
     """
     ext = os.path.splitext(original_filename)[1].lower()
     unique_id = uuid.uuid4().hex
@@ -25,14 +25,14 @@ def generate_unique_filename(original_filename: str) -> str:
 
 def allowed_file(filename: str, allowed_extensions: set) -> bool:
     """
-    Check if a file has an allowed extension.
+    检查文件是否具有允许的扩展名。
     
-    Args:
-        filename: The filename to check
-        allowed_extensions: Set of allowed extensions
+    参数:
+        filename: 要检查的文件名
+        allowed_extensions: 允许的扩展名集合
         
-    Returns:
-        True if allowed, False otherwise
+    返回:
+        如果允许返回 True，否则返回 False
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in allowed_extensions
@@ -40,15 +40,15 @@ def allowed_file(filename: str, allowed_extensions: set) -> bool:
 
 def save_uploaded_file(file, upload_folder: str, allowed_extensions: set) -> Optional[str]:
     """
-    Save an uploaded file securely.
+    安全地保存上传的文件。
     
-    Args:
-        file: The uploaded file object
-        upload_folder: Directory to save the file
-        allowed_extensions: Set of allowed extensions
+    参数:
+        file: 上传的文件对象
+        upload_folder: 保存文件的目录
+        allowed_extensions: 允许的扩展名集合
         
-    Returns:
-        Path to saved file or None if failed
+    返回:
+        保存文件的路径，如果失败则返回 None
     """
     if file.filename == '':
         return None
@@ -56,10 +56,10 @@ def save_uploaded_file(file, upload_folder: str, allowed_extensions: set) -> Opt
     if not allowed_file(file.filename, allowed_extensions):
         return None
     
-    # Create upload folder if it doesn't exist
+    # 如果上传文件夹不存在则创建
     os.makedirs(upload_folder, exist_ok=True)
     
-    # Generate unique filename
+    # 生成唯一文件名
     filename = generate_unique_filename(secure_filename(file.filename))
     filepath = os.path.join(upload_folder, filename)
     
@@ -67,17 +67,17 @@ def save_uploaded_file(file, upload_folder: str, allowed_extensions: set) -> Opt
         file.save(filepath)
         return filepath
     except Exception as e:
-        print(f"Error saving file: {e}")
+        print(f"保存文件时出错：{e}")
         return None
 
 
 def format_accuracy(accuracy: float) -> str:
-    """Format accuracy as percentage string."""
+    """将准确率格式化为百分比字符串。"""
     return f"{accuracy * 100:.2f}%"
 
 
 def truncate_string(s: str, max_length: int = 50) -> str:
-    """Truncate string to max length with ellipsis."""
+    """将字符串截断为最大长度并添加省略号。"""
     if len(s) <= max_length:
         return s
     return s[:max_length - 3] + "..."

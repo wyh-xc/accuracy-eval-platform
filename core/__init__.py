@@ -1,5 +1,5 @@
 """
-Core package initialization.
+核心包初始化。
 """
 
 from .file_handler import FileHandler

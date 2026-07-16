@@ -1,5 +1,5 @@
 """
-API client module for making HTTP requests to custom endpoints.
+API 客户端模块，用于向自定义端点发送 HTTP 请求。
 """
 
 import requests
@@ -8,14 +8,14 @@ import json
 
 
 class APIClient:
-    """HTTP client for making API requests."""
+    """用于发送 API 请求的 HTTP 客户端。"""
     
     def __init__(self, timeout: int = 30):
         """
-        Initialize the API client.
+        初始化 API 客户端。
         
-        Args:
-            timeout: Request timeout in seconds
+        参数:
+            timeout: 请求超时时间（秒）
         """
         self.timeout = timeout
         self.session = requests.Session()
@@ -31,22 +31,22 @@ class APIClient:
         extract_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        Send an HTTP request and return the response.
+        发送 HTTP 请求并返回响应。
         
-        Args:
-            url: The API endpoint URL
-            method: HTTP method (GET, POST, PUT, DELETE)
-            headers: HTTP headers
-            params: Query parameters
-            data: Form data
-            json_data: JSON body data
-            extract_path: Dot-notation path to extract specific field from response
+        参数:
+            url: API 端点 URL
+            method: HTTP 方法（GET、POST、PUT、DELETE）
+            headers: HTTP 请求头
+            params: 查询参数
+            data: 表单数据
+            json_data: JSON 请求体数据
+            extract_path: 使用点号表示法从响应中提取特定字段
             
-        Returns:
-            Dict containing response data and metadata
+        返回:
+            包含响应数据和元数据的字典
         """
         try:
-            # Default headers
+            # 默认请求头
             if headers is None:
                 headers = {}
             
@@ -63,13 +63,13 @@ class APIClient:
                 timeout=self.timeout,
             )
             
-            # Try to parse JSON response
+            # 尝试解析 JSON 响应
             try:
                 response_data = response.json()
             except json.JSONDecodeError:
                 response_data = {"raw": response.text}
             
-            # Extract specific field if path provided
+            # 如果提供了路径则提取特定字段
             result = response_data
             if extract_path:
                 result = self._extract_field(response_data, extract_path)
@@ -88,7 +88,7 @@ class APIClient:
                 "status_code": None,
                 "data": None,
                 "raw_response": None,
-                "error": f"Request timed out after {self.timeout} seconds",
+                "error": f"请求在 {self.timeout} 秒后超时",
             }
         except requests.exceptions.ConnectionError as e:
             return {
@@ -96,7 +96,7 @@ class APIClient:
                 "status_code": None,
                 "data": None,
                 "raw_response": None,
-                "error": f"Connection error: {str(e)}",
+                "error": f"连接错误：{str(e)}",
             }
         except Exception as e:
             return {
@@ -104,19 +104,19 @@ class APIClient:
                 "status_code": None,
                 "data": None,
                 "raw_response": None,
-                "error": f"Request failed: {str(e)}",
+                "error": f"请求失败：{str(e)}",
             }
     
     def _extract_field(self, data: Dict[str, Any], path: str) -> Any:
         """
-        Extract a field from nested dictionary using dot notation.
+        使用点号表示法从嵌套字典中提取字段。
         
-        Args:
-            data: The dictionary to extract from
-            path: Dot-notation path (e.g., "result.data.value")
+        参数:
+            data: 要从中提取的字典
+            path: 点号表示法路径（例如："result.data.value"）
             
-        Returns:
-            The extracted value or None if not found
+        返回:
+            提取的值，如果未找到则返回 None
         """
         keys = path.split('.')
         current = data
@@ -149,25 +149,25 @@ class APIClient:
         progress_callback=None,
     ) -> List[Dict[str, Any]]:
         """
-        Send multiple requests in batch.
+        批量发送多个请求。
         
-        Args:
-            url: The API endpoint URL
-            inputs: List of input values to send
-            method: HTTP method
-            headers: HTTP headers
-            input_field: Field name for the input in the request body
-            extract_path: Path to extract from response
-            progress_callback: Optional callback function for progress updates
+        参数:
+            url: API 端点 URL
+            inputs: 要发送的输入值列表
+            method: HTTP 方法
+            headers: HTTP 请求头
+            input_field: 请求体中输入字段的名称
+            extract_path: 从响应中提取的路径
+            progress_callback: 用于进度更新的可选回调函数
             
-        Returns:
-            List of response results
+        返回:
+            响应结果列表
         """
         results = []
         total = len(inputs)
         
         for idx, input_value in enumerate(inputs):
-            # Build request payload
+            # 构建请求负载
             json_data = {input_field: input_value}
             
             response = self.send_request(
@@ -185,7 +185,7 @@ class APIClient:
                 "error": response["error"],
             })
             
-            # Report progress
+            # 报告进度
             if progress_callback:
                 progress_callback(idx + 1, total)
         
