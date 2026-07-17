@@ -26,32 +26,14 @@ class StrategyRegistry:
     
     def __init__(self):
         if not self._initialized:
-            self._initialize_builtin_strategies()
             self._load_plugin_strategies()
             self._initialized = True
     
     @classmethod
     def _initialize_builtin_strategies(cls):
-        """初始化内置策略。"""
-        try:
-            from .builtin_strategies import (
-                ExactMatchStrategy,
-                CaseInsensitiveMatchStrategy,
-                NumericToleranceStrategy,
-                ContainsMatchStrategy,
-                JSONMatchStrategy,
-            )
-            
-            cls._strategies = {
-                "exact_match": ExactMatchStrategy(),
-                "case_insensitive": CaseInsensitiveMatchStrategy(),
-                "numeric_tolerance": NumericToleranceStrategy(),
-                "contains": ContainsMatchStrategy(),
-                "json_match": JSONMatchStrategy(),
-            }
-        except ImportError as e:
-            print(f"[警告] 加载内置策略失败：{e}")
-            cls._strategies = {}
+        """初始化内置策略（已废弃，所有策略均为插件）。"""
+        # 此方法已废弃，保留仅为兼容性
+        pass
     
     @classmethod
     def _load_plugin_strategies(cls):
@@ -107,10 +89,8 @@ class StrategyRegistry:
     @classmethod
     def reload_plugins(cls):
         """重新加载插件策略（支持热更新）。"""
+        cls._strategies.clear()
         cls._custom_strategies.clear()
-        # 保留内置策略
-        builtin_ids = list(cls._strategies.keys())
-        cls._initialize_builtin_strategies()
         # 重新加载插件
         cls._load_plugin_strategies()
         print("[系统] 插件策略已重新加载")

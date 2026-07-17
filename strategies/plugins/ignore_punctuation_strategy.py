@@ -18,6 +18,7 @@ class IgnorePunctuationStrategy(EvaluationStrategy):
     
     # 定义策略在前端显示的名称
     name = "ignore_punctuation"
+    description = "忽略标点：去除标点和空格后比较文本内容"
     
     def get_display_name(self):
         return "忽略标点符号匹配"

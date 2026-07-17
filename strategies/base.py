@@ -4,11 +4,15 @@
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any
 
 
 class EvaluationStrategy(ABC):
     """所有评测策略的基类。"""
+    
+    # 类属性，子类可以覆盖
+    name = "unknown"
+    description = ""
     
     @abstractmethod
     def evaluate(self, expected: Any, actual: Any) -> bool:
@@ -24,13 +28,10 @@ class EvaluationStrategy(ABC):
         """
         pass
     
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """返回此策略的显示名称。"""
-        pass
+    def get_display_name(self) -> str:
+        """返回此策略在前端显示的完整名称（可包含参数信息）。"""
+        return self.name
     
-    @property
-    def description(self) -> str:
-        """返回此策略的描述。"""
-        return ""
+    def get_description(self) -> str:
+        """返回此策略的详细描述。"""
+        return self.description
