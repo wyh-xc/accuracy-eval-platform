@@ -18,6 +18,7 @@ class ContainsStrategy(EvaluationStrategy):
     
     # 定义策略在前端显示的名称
     name = "contains"
+    description = "包含匹配：只要一方包含另一方即视为通过"
     
     def get_display_name(self):
         return "包含关系匹配"
